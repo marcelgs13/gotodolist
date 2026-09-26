@@ -10,10 +10,15 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   lint-and-test:
     name: Lint and test
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - name: Checkout repository
@@ -23,6 +28,7 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
+          cache: true
 
       - name: Download Go modules
         run: go mod download
@@ -42,7 +48,7 @@ jobs:
           version: v2.12.2
 
       - name: Run Go tests
-        run: go test ./...
+        run: go test -v ./...
 
   container-validation:
     name: Validate containers
