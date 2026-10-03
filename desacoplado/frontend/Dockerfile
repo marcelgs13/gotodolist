@@ -5,7 +5,8 @@ ENV GOTODOLIST_APP_VERSION=${APP_VERSION}
 
 USER root
 
-RUN apk add --no-cache gettext
+RUN apk upgrade --no-cache && \
+    apk add --no-cache gettext
 
 COPY desacoplado/frontend/nginx.conf /etc/nginx/conf.d/default.conf
 COPY desacoplado/frontend/index.html /usr/share/nginx/html/index.html

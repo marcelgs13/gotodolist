@@ -17,9 +17,12 @@ ARG APP_VERSION=dev
 RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH \
     go build -trimpath -ldflags="-s -w -X github.com/elton-bt/gotodolist/internal/config.version=${APP_VERSION}" -o /out/gotodolist-api ./desacoplado/backend
 
-FROM alpine:3.22.4 AS runtime
+FROM alpine:3.22 AS runtime
 
-RUN addgroup -S app && adduser -S app -G app && apk add --no-cache ca-certificates wget
+RUN apk upgrade --no-cache && \
+    addgroup -S app && \
+    adduser -S app -G app && \
+    apk add --no-cache ca-certificates wget
 
 WORKDIR /app
 
